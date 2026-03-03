@@ -17,6 +17,7 @@ final class AppState {
     var isPickerVisible = false
     var activeWindowMode = false
     var capturedWindowTitle = ""
+    var capturedWindowID: CGWindowID?
     var availableWindows: [CaptureableWindow] = []
     var permissionState: PermissionService.PermissionState = .unknown
 
@@ -118,6 +119,7 @@ final class AppState {
                 }
                 isCapturing = true
                 capturedWindowTitle = window.title
+                capturedWindowID = window.id
 
                 sharedSurfaceController?.resizeToFit(window.frame.size)
             } catch {
@@ -131,6 +133,7 @@ final class AppState {
             await captureService.stopCapture()
             isCapturing = false
             capturedWindowTitle = ""
+            capturedWindowID = nil
         }
     }
 
@@ -172,6 +175,7 @@ final class AppState {
             }
             isCapturing = true
             capturedWindowTitle = window.title
+            capturedWindowID = window.id
             sharedSurfaceController?.resizeToFit(window.frame.size)
         } catch {
             print("Active window switch error: \(error)")
