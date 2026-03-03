@@ -3,6 +3,7 @@ import Combine
 
 final class CaptureLayerView: NSView {
     private var cancellable: AnyCancellable?
+    private var pendingImage: CGImage?
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -14,8 +15,6 @@ final class CaptureLayerView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // BUG FIX: Configure the layer here, not in init.
-    // In init, wantsLayer=true hasn't created the layer yet, so layer? is nil.
     override func makeBackingLayer() -> CALayer {
         let layer = CALayer()
         layer.contentsGravity = .resizeAspect
@@ -25,12 +24,19 @@ final class CaptureLayerView: NSView {
 
     override var wantsUpdateLayer: Bool { true }
 
+    // Called by AppKit when needsDisplay is true — this flushes to the backing store.
+    override func updateLayer() {
+        layer?.contents = pendingImage
+    }
+
     func bind(to framePublisher: PassthroughSubject<CGImage, Never>) {
         cancellable = framePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] cgImage in
                 guard let self else { return }
-                self.layer?.contents = cgImage
+                self.pendingImage = cgImage
+                self.needsDisplay = true
+                self.displayIfNeeded()
             }
     }
 }
