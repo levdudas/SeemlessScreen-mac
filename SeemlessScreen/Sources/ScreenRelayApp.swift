@@ -1,11 +1,11 @@
 import SwiftUI
 
 @main
-struct SeemlessScreenApp: App {
+struct ScreenRelayApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {
-        MenuBarExtra("SeemlessScreen", systemImage: appState.isCapturing ? "rectangle.on.rectangle.fill" : "rectangle.on.rectangle") {
+        MenuBarExtra("ScreenRelay", systemImage: appState.isCapturing ? "rectangle.on.rectangle.fill" : "rectangle.on.rectangle") {
             MenuBarMenu(appState: appState)
         }
 

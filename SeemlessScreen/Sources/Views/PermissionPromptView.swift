@@ -12,7 +12,7 @@ struct PermissionPromptView: View {
             Text("Screen Recording Permission Required")
                 .font(.headline)
 
-            Text("SeemlessScreen needs Screen Recording access to capture window content. Please grant access in System Settings, then relaunch the app.")
+            Text("ScreenRelay needs Screen Recording access to capture window content. Please grant access in System Settings, then relaunch the app.")
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
 

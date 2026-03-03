@@ -11,7 +11,7 @@ final class WindowPickerPanel: NSPanel {
             defer: false
         )
 
-        title = "SeemlessScreen - Window Picker"
+        title = "ScreenRelay - Window Picker"
         isFloatingPanel = true
         level = .floating
         isReleasedWhenClosed = false

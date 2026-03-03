@@ -16,7 +16,7 @@ final class SharedSurfaceWindowController: NSWindowController {
             defer: false
         )
 
-        window.title = "SeemlessScreen - Shared Surface"
+        window.title = "ScreenRelay - Shared Surface"
         window.isReleasedWhenClosed = false
         window.contentView = captureView
         window.backgroundColor = .black

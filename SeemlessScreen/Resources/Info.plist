@@ -5,13 +5,13 @@
     <key>LSUIElement</key>
     <true/>
     <key>NSScreenCaptureUsageDescription</key>
-    <string>SeemlessScreen needs screen recording access to capture and mirror window content into the shared surface.</string>
+    <string>ScreenRelay needs screen recording access to capture and mirror window content into the shared surface.</string>
     <key>CFBundleIdentifier</key>
-    <string>com.seemlessscreen.app</string>
+    <string>com.screenrelay.app</string>
     <key>CFBundleName</key>
-    <string>SeemlessScreen</string>
+    <string>ScreenRelay</string>
     <key>CFBundleDisplayName</key>
-    <string>SeemlessScreen</string>
+    <string>ScreenRelay</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleShortVersionString</key>
@@ -19,6 +19,6 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleExecutable</key>
-    <string>SeemlessScreen</string>
+    <string>ScreenRelay</string>
 </dict>
 </plist>

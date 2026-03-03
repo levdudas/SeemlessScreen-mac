@@ -2,13 +2,13 @@
 import PackageDescription
 
 let package = Package(
-    name: "SeemlessScreen",
+    name: "ScreenRelay",
     platforms: [
         .macOS(.v14)
     ],
     targets: [
         .executableTarget(
-            name: "SeemlessScreen",
+            name: "ScreenRelay",
             path: "SeemlessScreen/Sources",
             resources: [
                 .process("../Resources")

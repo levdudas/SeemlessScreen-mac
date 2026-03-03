@@ -7,7 +7,7 @@ final class ScreenCaptureService: NSObject, @unchecked Sendable {
     private var stream: SCStream?
     private var currentFilter: SCContentFilter?
     private let videoQueue = DispatchQueue(
-        label: "com.seemlessscreen.videoQueue",
+        label: "com.screenrelay.videoQueue",
         qos: .userInteractive
     )
 

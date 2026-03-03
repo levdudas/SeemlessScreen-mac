@@ -3,7 +3,7 @@ import AppKit
 enum SingleInstanceGuard {
     @MainActor
     static func check() {
-        let bundleID = Bundle.main.bundleIdentifier ?? "com.seemlessscreen.app"
+        let bundleID = Bundle.main.bundleIdentifier ?? "com.screenrelay.app"
         let runningApps = NSRunningApplication.runningApplications(
             withBundleIdentifier: bundleID
         )
