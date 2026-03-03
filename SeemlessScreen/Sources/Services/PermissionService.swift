@@ -1,4 +1,3 @@
-import ScreenCaptureKit
 import AppKit
 
 final class PermissionService: Sendable {
@@ -9,14 +8,12 @@ final class PermissionService: Sendable {
     }
 
     func checkPermission() async -> PermissionState {
-        do {
-            let content = try await SCShareableContent.excludingDesktopWindows(
-                true, onScreenWindowsOnly: false
-            )
-            return content.windows.isEmpty ? .denied : .granted
-        } catch {
-            return .denied
+        // CGPreflightScreenCaptureAccess (macOS 14+) directly checks the TCC database
+        // without requiring windows to be open.
+        if CGPreflightScreenCaptureAccess() {
+            return .granted
         }
+        return .denied
     }
 
     @MainActor
