@@ -4,7 +4,7 @@ Seamlessly switch which window is shared during video calls — without stopping
 
 ## The Problem
 
-In Zoom, Teams, or Google Meet, sharing a specific window locks you to that one app. Want to show something else? You have to stop sharing, pick a new window, and reshare. Your audience sees the disruption.
+In Zoom, Teams, or Google Meet, sharing your entire screen might be inconvenient, and sharing a specific window locks you into it. Want to show something else? You have to stop sharing, pick a new window, and reshare. CLUNKY... Your audience sees the disruption, their screen is disrupted again if they started multitasking;)
 
 ## How ScreenRelay Solves It
 
