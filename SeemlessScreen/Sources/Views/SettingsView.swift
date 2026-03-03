@@ -64,8 +64,8 @@ struct SettingsView: View {
                         Label("Granted", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(.green)
                     } else {
-                        Button("Open System Settings") {
-                            appState.permissionService.openScreenRecordingSettings()
+                        Button("Grant Access") {
+                            appState.permissionService.requestAccess()
                         }
                     }
                 }

@@ -21,7 +21,7 @@ struct MenuBarMenu: View {
     var body: some View {
         if appState.permissionState == .denied {
             Button("Grant Screen Recording Permission...") {
-                appState.permissionService.openScreenRecordingSettings()
+                appState.permissionService.requestAccess()
             }
             Divider()
         }

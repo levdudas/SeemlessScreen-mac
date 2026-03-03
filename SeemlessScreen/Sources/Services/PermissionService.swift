@@ -17,9 +17,9 @@ final class PermissionService: Sendable {
     }
 
     @MainActor
-    func openScreenRecordingSettings() {
-        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_ScreenCapture") {
-            NSWorkspace.shared.open(url)
-        }
+    func requestAccess() {
+        // Triggers the native macOS permission dialog on first call.
+        // On subsequent calls (if already denied), opens System Settings.
+        CGRequestScreenCaptureAccess()
     }
 }

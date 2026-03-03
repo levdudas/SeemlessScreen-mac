@@ -45,6 +45,9 @@ final class AppState {
             permissionState = await permissionService.checkPermission()
             if permissionState == .granted {
                 initializeUI()
+            } else {
+                // Trigger native permission dialog on first launch
+                permissionService.requestAccess()
             }
         }
     }
@@ -77,7 +80,7 @@ final class AppState {
 
     func togglePicker() {
         guard permissionState == .granted else {
-            permissionService.openScreenRecordingSettings()
+            permissionService.requestAccess()
             return
         }
 

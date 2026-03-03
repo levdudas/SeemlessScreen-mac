@@ -16,8 +16,8 @@ struct PermissionPromptView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.secondary)
 
-            Button("Open System Settings") {
-                permissionService.openScreenRecordingSettings()
+            Button("Grant Access") {
+                permissionService.requestAccess()
             }
             .buttonStyle(.borderedProminent)
         }
