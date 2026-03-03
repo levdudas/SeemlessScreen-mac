@@ -72,7 +72,7 @@ struct SettingsView: View {
             }
 
             Section("About") {
-                LabeledContent("Version", value: "1.0.0")
+                LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0")
                 Text("Seamlessly switch which window is shared in video calls.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
