@@ -4,6 +4,7 @@ struct WindowThumbnailView: View {
     let window: CaptureableWindow
     let isCurrentlySharing: Bool
     let onSelect: () -> Void
+    let windowEnumerationService: WindowEnumerationService
 
     @State private var thumbnail: NSImage?
     @State private var isHovering = false
@@ -85,8 +86,7 @@ struct WindowThumbnailView: View {
     }
 
     private func loadThumbnail() async {
-        let service = WindowEnumerationService()
-        if let cgImage = await service.getThumbnail(for: window) {
+        if let cgImage = await windowEnumerationService.getThumbnail(for: window) {
             let size = NSSize(
                 width: cgImage.width,
                 height: cgImage.height

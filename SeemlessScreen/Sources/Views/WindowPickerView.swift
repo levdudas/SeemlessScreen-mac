@@ -83,10 +83,10 @@ struct WindowPickerView: View {
                         ForEach(filteredWindows) { window in
                             WindowThumbnailView(
                                 window: window,
-                                isCurrentlySharing: appState.capturedWindowID == window.id
-                            ) {
-                                appState.selectWindow(window)
-                            }
+                                isCurrentlySharing: appState.capturedWindowID == window.id,
+                                onSelect: { appState.selectWindow(window) },
+                                windowEnumerationService: appState.windowEnumerationService
+                            )
                         }
                     }
                     .padding(12)
