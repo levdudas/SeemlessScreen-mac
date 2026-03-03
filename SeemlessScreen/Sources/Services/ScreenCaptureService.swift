@@ -67,7 +67,8 @@ final class ScreenCaptureService: NSObject, @unchecked Sendable {
         config.minimumFrameInterval = CMTime(value: 1, timescale: 30) // 30fps is plenty for screen sharing
         config.pixelFormat = kCVPixelFormatType_32BGRA
         config.queueDepth = 3
-        config.showsCursor = true
+        let showCursor = UserDefaults.standard.object(forKey: "showCursor") as? Bool ?? true
+        config.showsCursor = showCursor
         config.scalesToFit = true
         config.preservesAspectRatio = true
         config.shouldBeOpaque = true
