@@ -9,7 +9,7 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "ScreenRelay",
-            path: "SeemlessScreen/Sources",
+            path: "ScreenRelay/Sources",
             resources: [
                 .process("../Resources")
             ]
