@@ -1,5 +1,6 @@
 import ScreenCaptureKit
 import CoreMedia
+import CoreImage
 import Combine
 
 final class ScreenCaptureService: NSObject, @unchecked Sendable {
@@ -10,7 +11,11 @@ final class ScreenCaptureService: NSObject, @unchecked Sendable {
         qos: .userInteractive
     )
 
-    let framePublisher = PassthroughSubject<IOSurface, Never>()
+    // Publish CGImage (guaranteed to render as CALayer.contents on macOS)
+    let framePublisher = PassthroughSubject<CGImage, Never>()
+
+    // GPU-accelerated image conversion
+    private let ciContext = CIContext(options: [.useSoftwareRenderer: false])
 
     private(set) var capturedWindow: CaptureableWindow?
 
@@ -59,9 +64,9 @@ final class ScreenCaptureService: NSObject, @unchecked Sendable {
         let scale: CGFloat = 2.0 // Retina
         config.width = Int(max(size.width, 320) * scale)
         config.height = Int(max(size.height, 240) * scale)
-        config.minimumFrameInterval = CMTime(value: 1, timescale: 60)
+        config.minimumFrameInterval = CMTime(value: 1, timescale: 30) // 30fps is plenty for screen sharing
         config.pixelFormat = kCVPixelFormatType_32BGRA
-        config.queueDepth = 5
+        config.queueDepth = 3
         config.showsCursor = true
         config.scalesToFit = true
         config.preservesAspectRatio = true
@@ -80,20 +85,24 @@ extension ScreenCaptureService: SCStreamOutput {
     ) {
         guard type == .screen else { return }
 
+        // BUG FIX: Use String keys — the CF dictionary does NOT bridge to SCStreamFrameInfo keys
         guard let attachmentsArray = CMSampleBufferGetSampleAttachmentsArray(
             sampleBuffer, createIfNecessary: false
-        ) as? [[SCStreamFrameInfo: Any]],
-              let statusRaw = attachmentsArray.first?[.status] as? Int,
+        ) as? [[String: Any]],
+              let statusRaw = attachmentsArray.first?[SCStreamFrameInfo.status.rawValue] as? Int,
               let status = SCFrameStatus(rawValue: statusRaw),
               status == .complete else {
             return
         }
 
         guard let pixelBuffer = sampleBuffer.imageBuffer else { return }
-        guard let surfaceRef = CVPixelBufferGetIOSurface(pixelBuffer) else { return }
-        let surface = unsafeBitCast(surfaceRef, to: IOSurface.self)
 
-        framePublisher.send(surface)
+        // BUG FIX: Convert to CGImage — IOSurface as CALayer.contents is unreliable on macOS.
+        // CIContext uses GPU internally, so this is hardware-accelerated.
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
+
+        framePublisher.send(cgImage)
     }
 }
 

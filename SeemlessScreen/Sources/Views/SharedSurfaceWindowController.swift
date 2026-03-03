@@ -5,7 +5,7 @@ import Combine
 final class SharedSurfaceWindowController: NSWindowController {
     let captureView: CaptureLayerView
 
-    init(framePublisher: PassthroughSubject<IOSurface, Never>) {
+    init(framePublisher: PassthroughSubject<CGImage, Never>) {
         let captureView = CaptureLayerView(frame: .zero)
         self.captureView = captureView
 
@@ -35,7 +35,11 @@ final class SharedSurfaceWindowController: NSWindowController {
     }
 
     func showWindow() {
-        window?.makeKeyAndOrderFront(nil)
+        guard let window else { return }
+        window.makeKeyAndOrderFront(nil)
+        // BUG FIX: orderFrontRegardless works for LSUIElement (menu-bar-only) apps
+        // where makeKeyAndOrderFront alone may not bring the window to the front.
+        window.orderFrontRegardless()
         NSApp.activate(ignoringOtherApps: true)
     }
 

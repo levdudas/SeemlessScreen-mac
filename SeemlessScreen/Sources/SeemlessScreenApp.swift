@@ -41,10 +41,10 @@ struct MenuBarMenu: View {
         Divider()
 
         if appState.isCapturing {
-            Text("Sharing: \(appState.capturedWindowTitle)")
+            Text("Mirroring: \(appState.capturedWindowTitle)")
                 .disabled(true)
 
-            Button("Stop Sharing") {
+            Button("Stop Mirroring") {
                 appState.stopCapture()
             }
 

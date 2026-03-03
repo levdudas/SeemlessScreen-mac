@@ -7,8 +7,6 @@ final class CaptureLayerView: NSView {
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
-        layer?.contentsGravity = .resizeAspect
-        layer?.backgroundColor = NSColor.black.cgColor
     }
 
     @available(*, unavailable)
@@ -16,11 +14,23 @@ final class CaptureLayerView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(to framePublisher: PassthroughSubject<IOSurface, Never>) {
+    // BUG FIX: Configure the layer here, not in init.
+    // In init, wantsLayer=true hasn't created the layer yet, so layer? is nil.
+    override func makeBackingLayer() -> CALayer {
+        let layer = CALayer()
+        layer.contentsGravity = .resizeAspect
+        layer.backgroundColor = NSColor.black.cgColor
+        return layer
+    }
+
+    override var wantsUpdateLayer: Bool { true }
+
+    func bind(to framePublisher: PassthroughSubject<CGImage, Never>) {
         cancellable = framePublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] surface in
-                self?.layer?.contents = surface
+            .sink { [weak self] cgImage in
+                guard let self else { return }
+                self.layer?.contents = cgImage
             }
     }
 }

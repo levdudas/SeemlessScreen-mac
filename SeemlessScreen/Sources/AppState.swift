@@ -31,7 +31,6 @@ final class AppState {
     }
 
     private func setup() {
-        // Check permissions
         Task {
             permissionState = await permissionService.checkPermission()
             if permissionState == .granted {
@@ -87,6 +86,7 @@ final class AppState {
         Task {
             await refreshWindows()
             pickerPanel?.makeKeyAndOrderFront(nil)
+            pickerPanel?.orderFrontRegardless()
             NSApp.activate(ignoringOtherApps: true)
             isPickerVisible = true
         }
@@ -104,6 +104,11 @@ final class AppState {
             activeWindowTracker.stop()
         }
 
+        startCapturing(window)
+        hidePicker()
+    }
+
+    private func startCapturing(_ window: CaptureableWindow) {
         Task {
             do {
                 if isCapturing {
@@ -114,14 +119,11 @@ final class AppState {
                 isCapturing = true
                 capturedWindowTitle = window.title
 
-                // Resize shared surface to match window aspect ratio
                 sharedSurfaceController?.resizeToFit(window.frame.size)
             } catch {
                 print("Capture error: \(error)")
             }
         }
-
-        hidePicker()
     }
 
     func stopCapture() {
@@ -133,6 +135,9 @@ final class AppState {
     }
 
     func showSharedSurface() {
+        if sharedSurfaceController == nil {
+            initializeUI()
+        }
         sharedSurfaceController?.showWindow()
     }
 
@@ -155,12 +160,19 @@ final class AppState {
     }
 
     private func handleActiveWindowChanged(_ app: NSRunningApplication) async {
-        guard isCapturing else { return }
+        // BUG FIX: removed `guard isCapturing` — Active Window Mode should start
+        // capturing automatically, even if no window was manually selected first.
         guard let scWindow = await activeWindowTracker.frontmostWindow(of: app) else { return }
         let window = CaptureableWindow(from: scWindow)
         do {
-            try await captureService.switchWindow(window)
+            if isCapturing {
+                try await captureService.switchWindow(window)
+            } else {
+                try await captureService.startCapture(window: window)
+            }
+            isCapturing = true
             capturedWindowTitle = window.title
+            sharedSurfaceController?.resizeToFit(window.frame.size)
         } catch {
             print("Active window switch error: \(error)")
         }

@@ -43,14 +43,14 @@ struct WindowPickerView: View {
                     Circle()
                         .fill(.green)
                         .frame(width: 8, height: 8)
-                    Text("Sharing: \(appState.capturedWindowTitle)")
+                    Text("Mirroring: \(appState.capturedWindowTitle)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 } else {
                     Circle()
                         .fill(.gray)
                         .frame(width: 8, height: 8)
-                    Text("Not sharing")
+                    Text("Not mirroring")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -107,7 +107,7 @@ struct WindowPickerView: View {
                 Spacer()
 
                 if appState.isCapturing {
-                    Button("Stop Sharing") {
+                    Button("Stop Mirroring") {
                         appState.stopCapture()
                     }
                     .controlSize(.small)
