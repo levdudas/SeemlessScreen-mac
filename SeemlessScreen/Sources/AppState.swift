@@ -32,6 +32,15 @@ final class AppState {
     }
 
     private func setup() {
+        // Ensure cleanup runs even if the app is terminated externally
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.cleanup()
+        }
+
         Task {
             permissionState = await permissionService.checkPermission()
             if permissionState == .granted {
